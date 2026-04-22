@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<link rel="manifest" id="pwa-manifest">
+<script type="application/json" id="pwa-manifest-data">{
+  "name": "VN Stock AI - Phân tích cổ phiếu",
+  "short_name": "VN Stock AI",
+  "description": "Phân tích cổ phiếu theo CTCK: SSI, VnDirect, HSC",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#0b0f1a",
+  "theme_color": "#0b0f1a",
+  "orientation": "portrait-primary",
+  "lang": "vi",
+  "icons": [
+    {"src": "data:image/png;base64,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", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "data:image/png;base64,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", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}</script>
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<meta name="apple-mobile-web-app-title" content="VN Stock AI">
+<style>
+@keyframes slideUp2 {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+#install-fab:active { transform: scale(.92) !important; }
+#install-modal { touch-action: none; }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0b0f1a">
+<title>VN Stock AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg: #0b0f1a;
+  --surface: #131929;
+  --card: #1a2236;
+  --border: rgba(100,160,255,0.13);
+  --accent: #5b9cf6;
+  --green: #4ade80;
+  --yellow: #facc15;
+  --red: #f87171;
+  --text: #e8edf5;
+  --muted: #6b7a99;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { font-size: 16px; }
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overscroll-behavior: none;
+}
+
+/* ── TOP BAR ── */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(11,15,26,0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  padding: calc(var(--safe-top) + 12px) 16px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar-logo {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: -0.3px;
+}
+.topbar-logo span { color: var(--yellow); }
+.live-dot {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--green);
+}
+.dot {
+  width: 6px; height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* ── SEARCH PANEL ── */
+.search-panel {
+  padding: 20px 16px 0;
+}
+.search-title {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 6px;
+  background: linear-gradient(120deg, #e8edf5 20%, #5b9cf6 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.search-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 18px;
+  font-weight: 300;
+}
+
+/* Ticker chips */
+.ticker-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  margin-bottom: 14px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.ticker-scroll::-webkit-scrollbar { display: none; }
+.tc {
+  flex-shrink: 0;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  cursor: pointer;
+  transition: background .15s, border-color .15s;
+  -webkit-user-select: none;
+  user-select: none;
+}
+.tc:active { background: rgba(91,156,246,.15); border-color: var(--accent); }
+
+/* Input group */
+.input-group {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.input-ticker {
+  width: 100px;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 12px;
+  color: var(--text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  outline: none;
+  text-align: center;
+  -webkit-appearance: none;
+}
+.input-ticker:focus { border-color: var(--accent); }
+.input-ticker::placeholder { font-size: 12px; letter-spacing: 1px; color: var(--muted); }
+
+.btn-analyze {
+  flex: 1;
+  background: linear-gradient(135deg, #5b9cf6 0%, #3b82f6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity .15s, transform .1s;
+  -webkit-appearance: none;
+  min-height: 52px;
+}
+.btn-analyze:active:not(:disabled) { transform: scale(.97); opacity: .9; }
+.btn-analyze:disabled { opacity: .45; }
+
+/* Question input */
+.input-question {
+  width: 100%;
+  background: var(--card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 13px 14px;
+  color: var(--text);
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 14px;
+  outline: none;
+  -webkit-appearance: none;
+  margin-bottom: 12px;
+}
+.input-question:focus { border-color: var(--accent); }
+.input-question::placeholder { color: var(--muted); font-size: 13px; }
+
+/* Quick prompt chips */
+.qp-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.qp-scroll::-webkit-scrollbar { display: none; }
+.qp {
+  flex-shrink: 0;
+  background: rgba(91,156,246,.08);
+  border: 1px solid rgba(91,156,246,.2);
+  border-radius: 20px;
+  padding: 7px 14px;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background .15s;
+}
+.qp:active { background: rgba(91,156,246,.2); }
+
+/* ── DIVIDER ── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 0 16px;
+}
+
+/* ── RESULTS ── */
+.results {
+  padding: 16px 16px calc(var(--safe-bottom) + 32px);
+  display: none;
+}
+
+/* Loading */
+.loading-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px 20px;
+}
+.loading-ticker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--accent);
+  margin-bottom: 20px;
+  text-align: center;
+}
+.steps { display: flex; flex-direction: column; gap: 14px; }
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--muted);
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: all .35s ease;
+}
+.step.on { opacity: 1; transform: translateX(0); color: var(--text); }
+.step.done { opacity: .5; }
+.step-ic { width: 22px; height: 22px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+.spin {
+  width: 16px; height: 16px;
+  border: 2px solid rgba(91,156,246,.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Result card */
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+  animation: up .4s ease both;
+}
+@keyframes up { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+
+.rc-header {
+  padding: 18px 18px 16px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(91,156,246,.06) 0%, transparent 60%);
+}
+.rc-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.rc-ticker {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1;
+}
+.rc-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.rec-badge {
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .5px;
+  flex-shrink: 0;
+}
+.rb-buy  { background: rgba(74,222,128,.12); color: var(--green);  border: 1px solid rgba(74,222,128,.3); }
+.rb-watch{ background: rgba(250,204,21,.10); color: var(--yellow); border: 1px solid rgba(250,204,21,.3); }
+.rb-avoid{ background: rgba(248,113,113,.10); color: var(--red);  border: 1px solid rgba(248,113,113,.3); }
+
+/* Source chips */
+.src-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.src {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: .5px;
+}
+.s-ssi  { background: rgba(251,146,60,.12); color:#fb923c; border:1px solid rgba(251,146,60,.25); }
+.s-vnd  { background: rgba(74,222,128,.10); color:var(--green); border:1px solid rgba(74,222,128,.25); }
+.s-hsc  { background: rgba(196,181,253,.12); color:#c4b5fd; border:1px solid rgba(196,181,253,.25); }
+.s-vcbs { background: rgba(250,204,21,.10); color:var(--yellow); border:1px solid rgba(250,204,21,.25); }
+.s-mbs  { background: rgba(91,156,246,.10); color:var(--accent); border:1px solid rgba(91,156,246,.25); }
+.s-mas  { background: rgba(113,128,150,.12); color:var(--muted); border:1px solid rgba(113,128,150,.25); }
+
+/* Body */
+.rc-body { padding: 18px; }
+.analysis-text {
+  font-size: 14px;
+  line-height: 1.85;
+  color: #c8d4e8;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Disclaimer */
+.disclaimer {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: rgba(250,204,21,.05);
+  border: 1px solid rgba(250,204,21,.15);
+  border-radius: 10px;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Follow-up */
+.followup-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 18px 0 10px;
+}
+.followup-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.followup-scroll::-webkit-scrollbar { display: none; }
+.fu-btn {
+  flex-shrink: 0;
+  background: rgba(91,156,246,.08);
+  border: 1px solid rgba(91,156,246,.2);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 12px;
+  color: var(--accent);
+  cursor: pointer;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  user-select: none;
+  transition: background .15s;
+}
+.fu-btn:active { background: rgba(91,156,246,.2); }
+
+/* Error */
+.error-card {
+  background: rgba(248,113,113,.06);
+  border: 1px solid rgba(248,113,113,.2);
+  border-radius: 16px;
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--red);
+}
+.error-card .e-icon { font-size: 32px; margin-bottom: 10px; }
+.error-card .e-msg { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+/* Bottom spacer for iPhone home bar */
+.bottom-space { height: calc(var(--safe-bottom) + 16px); }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-logo">VN Stock <span>AI</span></div>
+  <div class="live-dot"><div class="dot"></div>AI Research</div>
+</div>
+
+<!-- SEARCH PANEL -->
+<div class="search-panel">
+  <div class="search-title">Phân tích cổ phiếu<br>theo CTCK</div>
+  <div class="search-sub">Tổng hợp SSI · VnDirect · HSC · VCBS · MBS</div>
+
+  <!-- Popular tickers -->
+  <div class="ticker-scroll">
+    <div class="tc" onclick="pick('FPT')">FPT</div>
+    <div class="tc" onclick="pick('MBB')">MBB</div>
+    <div class="tc" onclick="pick('CTG')">CTG</div>
+    <div class="tc" onclick="pick('HPG')">HPG</div>
+    <div class="tc" onclick="pick('REE')">REE</div>
+    <div class="tc" onclick="pick('VCB')">VCB</div>
+    <div class="tc" onclick="pick('TCB')">TCB</div>
+    <div class="tc" onclick="pick('VNM')">VNM</div>
+    <div class="tc" onclick="pick('PNJ')">PNJ</div>
+    <div class="tc" onclick="pick('MSN')">MSN</div>
+    <div class="tc" onclick="pick('ACB')">ACB</div>
+    <div class="tc" onclick="pick('VHM')">VHM</div>
+  </div>
+
+  <!-- Input row -->
+  <div class="input-group">
+    <input id="ti" class="input-ticker" type="text" placeholder="Mã CP" maxlength="10"
+      autocomplete="off" autocorrect="off" autocapitalize="characters" spellcheck="false"
+      inputmode="text" />
+    <button id="btn" class="btn-analyze" onclick="run()">🔍 Phân tích</button>
+  </div>
+
+  <!-- Question -->
+  <input id="qi" class="input-question" type="text"
+    placeholder="Hỏi gì cũng được: định giá, rủi ro, có nên mua không..."
+    autocomplete="off" autocorrect="off" spellcheck="false" />
+
+  <!-- Quick prompts -->
+  <div class="qp-scroll">
+    <div class="qp" onclick="setQ('Phân tích toàn diện 6 lớp và khuyến nghị từ các CTCK')">📊 Toàn diện</div>
+    <div class="qp" onclick="setQ('Tổng hợp giá mục tiêu và khuyến nghị MUA/BÁN từ SSI, VnDirect, HSC')">🏦 Khuyến nghị CTCK</div>
+    <div class="qp" onclick="setQ('Phân tích ROE, ROA, PE, PB và so sánh với ngành')">📈 Chỉ số tài chính</div>
+    <div class="qp" onclick="setQ('Bull case và Bear case cho DCA 3-5 năm')">🐂🐻 Bull vs Bear</div>
+    <div class="qp" onclick="setQ('Có nên mua ở vùng giá hiện tại? Margin of safety?')">💰 Nên mua không?</div>
+    <div class="qp" onclick="setQ('Rủi ro chính cần theo dõi khi đầu tư dài hạn')">⚠️ Rủi ro</div>
+    <div class="qp" onclick="setQ('Kế hoạch DCA: giá vào, tỷ trọng danh mục, điểm review')">📅 Kế hoạch DCA</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- RESULTS -->
+<div class="results" id="results"></div>
+
+<div class="bottom-space"></div>
+
+<script>
+function pick(t) {
+  document.getElementById('ti').value = t;
+  document.getElementById('ti').style.borderColor = 'var(--accent)';
+  setTimeout(() => document.getElementById('ti').style.borderColor = '', 1200);
+}
+function setQ(q) {
+  document.getElementById('qi').value = q;
+  document.getElementById('qi').focus();
+}
+
+document.getElementById('ti').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('qi').focus(); }
+});
+document.getElementById('qi').addEventListener('keydown', e => {
+  if (e.key === 'Enter') { e.preventDefault(); run(); }
+});
+
+async function run() {
+  const ticker = document.getElementById('ti').value.trim().toUpperCase();
+  const question = document.getElementById('qi').value.trim();
+
+  if (!ticker) {
+    document.getElementById('ti').style.borderColor = 'var(--red)';
+    document.getElementById('ti').focus();
+    setTimeout(() => document.getElementById('ti').style.borderColor = '', 1500);
+    return;
+  }
+
+  // blur keyboard on mobile
+  document.getElementById('ti').blur();
+  document.getElementById('qi').blur();
+
+  const R = document.getElementById('results');
+  R.style.display = 'block';
+  document.getElementById('btn').disabled = true;
+
+  const q = question || `Phân tích toàn diện cổ phiếu ${ticker}: 6 lớp phân tích (vĩ mô, ngành, tài chính, định giá, catalyst, rủi ro), tổng hợp khuyến nghị từ SSI/VnDirect/HSC, bull case, bear case, và kết luận cho nhà đầu tư DCA 3-5 năm.`;
+
+  // Loading UI
+  R.innerHTML = `
+    <div class="loading-card">
+      <div class="loading-ticker">Đang phân tích <strong style="color:#e8edf5">${ticker}</strong>...</div>
+      <div class="steps" id="steps">
+        <div class="step" id="s1"><span class="step-ic"><div class="spin"></div></span>Tìm kiếm báo cáo SSI, VnDirect, HSC...</div>
+        <div class="step" id="s2"><span class="step-ic">⏳</span>Thu thập BCTC & chỉ số tài chính...</div>
+        <div class="step" id="s3"><span class="step-ic">⏳</span>Tổng hợp khuyến nghị CTCK...</div>
+        <div class="step" id="s4"><span class="step-ic">⏳</span>Phân tích & đưa kết luận đầu tư...</div>
+      </div>
+    </div>`;
+
+  // Scroll to results
+  setTimeout(() => R.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+
+  // Animate steps
+  const delays = [0, 700, 1400, 2100];
+  delays.forEach((d, i) => {
+    setTimeout(() => {
+      const s = document.getElementById(`s${i+1}`);
+      if (!s) return;
+      s.classList.add('on');
+      s.querySelector('.step-ic').innerHTML = '<div class="spin"></div>';
+      if (i > 0) {
+        const prev = document.getElementById(`s${i}`);
+        if (prev) { prev.classList.add('done'); prev.querySelector('.step-ic').textContent = '✓'; }
+      }
+    }, d);
+  });
+
+  try {
+    const sys = `Bạn là chuyên gia phân tích đầu tư chứng khoán Việt Nam cấp cao.
+Nhiệm vụ: phân tích cổ phiếu dựa trên kiến thức chuyên sâu về thị trường Việt Nam và báo cáo của các CTCK lớn.
+
+Khi phân tích, hãy:
+- Đề cập các chỉ số: ROE, ROA, P/E, P/B, EPS, tăng trưởng doanh thu/lợi nhuận, tỷ lệ nợ
+- Nêu consensus từ SSI Research, VnDirect, HSC, VCBS, MBS (giá mục tiêu, khuyến nghị nếu biết)
+- Trình bày Bull Case và Bear Case rõ ràng
+- Kết luận: MUA / THEO DÕI / TRÁNH + lý do
+- Người dùng DCA hàng tháng, tầm nhìn 3-5 năm, khẩu vị mạo hiểm vừa phải
+
+Viết tiếng Việt, súc tích, dùng emoji làm tiêu đề đoạn. KHÔNG dùng markdown (**bold**, ## heading). Chỉ dùng text thuần và emoji. Phần KHUYẾN NGHỊ phải rõ ràng ở cuối.`;
+
+    const resp = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1000,
+        system: sys,
+        messages: [{ role: 'user', content: `Mã: ${ticker}\nYêu cầu: ${q}\nNgày: ${new Date().toLocaleDateString('vi-VN')}` }]
+      })
+    });
+
+    if (!resp.ok) throw new Error('Lỗi API: ' + resp.status);
+    const data = await resp.json();
+    const text = data.content.map(b => b.text || '').join('');
+
+    renderResult(ticker, text, q, R);
+  } catch(err) {
+    R.innerHTML = `<div class="error-card">
+      <div class="e-icon">⚠️</div>
+      <div style="font-size:14px;font-weight:600">Không kết nối được</div>
+      <div class="e-msg">${err.message}</div>
+      <button onclick="run()" style="margin-top:16px;background:rgba(91,156,246,.15);border:1px solid rgba(91,156,246,.3);color:var(--accent);padding:10px 20px;border-radius:10px;font-size:13px;cursor:pointer;font-family:'Space Grotesk',sans-serif;">Thử lại</button>
+    </div>`;
+  }
+
+  document.getElementById('btn').disabled = false;
+}
+
+function renderResult(ticker, text, origQ, R) {
+  const up = text.toUpperCase();
+  let rbClass = 'rb-watch', rbText = '⏳ THEO DÕI';
+  if (up.includes('KHUYẾN NGHỊ: MUA') || up.includes('KHUYẾN NGHỊ MUA') || up.includes('NÊN MUA') || (up.includes(': MUA') && !up.includes('KHÔNG NÊN MUA'))) {
+    rbClass = 'rb-buy'; rbText = '✅ MUA';
+  } else if (up.includes('TRÁNH') || up.includes('KHÔNG NÊN') || up.includes(': BÁN')) {
+    rbClass = 'rb-avoid'; rbText = '🚫 TRÁNH';
+  }
+
+  const sources = [
+    { cls:'s-ssi',  name:'SSI' },
+    { cls:'s-vnd',  name:'VnDirect' },
+    { cls:'s-hsc',  name:'HSC' },
+    { cls:'s-vcbs', name:'VCBS' },
+    { cls:'s-mbs',  name:'MBS' },
+    { cls:'s-mas',  name:'Mirae' },
+  ];
+
+  R.innerHTML = `
+    <div class="result-card">
+      <div class="rc-header">
+        <div class="rc-top">
+          <div>
+            <div class="rc-ticker">${ticker}</div>
+            <div class="rc-label">Tổng hợp phân tích CTCK · ${new Date().toLocaleDateString('vi-VN')}</div>
+          </div>
+          <div class="rec-badge ${rbClass}">${rbText}</div>
+        </div>
+        <div class="src-row">
+          ${sources.map(s=>`<span class="src ${s.cls}">${s.name}</span>`).join('')}
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="analysis-text">${esc(text)}</div>
+        <div class="disclaimer">⚠️ Phân tích AI tổng hợp, không phải khuyến nghị đầu tư chính thức. Kiểm tra thêm báo cáo thực tế từ SSI/VnDirect/HSC trước khi ra quyết định.</div>
+        <div class="followup-title">Câu hỏi tiếp theo</div>
+        <div class="followup-scroll">
+          <div class="fu-btn" onclick="fu('${ticker}','Phân tích định giá sâu hơn — DCF, so sánh P/E ngành')">🎯 Định giá chi tiết</div>
+          <div class="fu-btn" onclick="fu('${ticker}','So sánh với cổ phiếu cùng ngành — ai tốt hơn?')">⚖️ So sánh ngành</div>
+          <div class="fu-btn" onclick="fu('${ticker}','Kế hoạch DCA: vùng giá mua, % danh mục, khi nào chốt')">📅 Kế hoạch DCA</div>
+          <div class="fu-btn" onclick="fu('${ticker}','Catalyst ngắn hạn 6 tháng tới cần theo dõi')">⚡ Catalyst</div>
+          <div class="fu-btn" onclick="fu('${ticker}','Rủi ro lớn nhất — điều gì có thể làm thesis sai?')">🔴 Rủi ro chính</div>
+        </div>
+      </div>
+    </div>`;
+
+  R.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function esc(t) {
+  return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function fu(ticker, q) {
+  document.getElementById('ti').value = ticker;
+  document.getElementById('qi').value = q;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  setTimeout(run, 400);
+}
+</script>
+
+<!-- ── INSTALL MODAL ── -->
+<div id="install-modal" style="display:none;position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.78);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);align-items:flex-end;justify-content:center;">
+  <div style="background:#1a2236;border-top:1px solid rgba(91,156,246,.25);border-radius:20px 20px 0 0;padding:20px 20px calc(env(safe-area-inset-bottom,0px) + 24px);width:100%;max-width:480px;animation:slideUp2 .32s ease both;">
+    <div style="width:36px;height:4px;background:rgba(255,255,255,.12);border-radius:4px;margin:0 auto 20px;"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:6px;">
+      <div style="width:44px;height:44px;background:rgba(91,156,246,.12);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">📈</div>
+      <div>
+        <div style="font-size:17px;font-weight:700;color:#e8edf5;">Cài VN Stock AI</div>
+        <div style="font-size:12px;color:#6b7a99;">Dùng như app thật, không cần cài từ store</div>
+      </div>
+    </div>
+
+    <div style="height:1px;background:rgba(255,255,255,.07);margin:18px 0;"></div>
+
+    <!-- Samsung guide -->
+    <div id="guide-samsung" style="display:none;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#fb923c;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;">📱 Samsung Internet Browser</div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fb923c;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:#c8d4e8;line-height:1.5;">Nhấn nút <span style="background:rgba(255,255,255,.1);padding:2px 8px;border-radius:5px;font-size:12px;">≡ Menu</span> ở dưới màn hình</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fb923c;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:#c8d4e8;line-height:1.5;">Chọn <span style="color:#e8edf5;font-weight:600;">"Thêm trang vào"</span></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(251,146,60,.12);border:1px solid rgba(251,146,60,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fb923c;flex-shrink:0;">3</div>
+          <div style="font-size:13px;color:#c8d4e8;line-height:1.5;">Chọn <span style="color:#e8edf5;font-weight:600;">"Màn hình chính"</span> → Thêm</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✓</div>
+          <div style="font-size:13px;color:#4ade80;line-height:1.5;">Icon 📈 xuất hiện trên màn hình chính!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chrome guide -->
+    <div id="guide-chrome" style="display:none;">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#5b9cf6;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:14px;">🌐 Google Chrome</div>
+      <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(91,156,246,.12);border:1px solid rgba(91,156,246,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#5b9cf6;flex-shrink:0;">1</div>
+          <div style="font-size:13px;color:#c8d4e8;line-height:1.5;">Nhấn nút <span style="background:rgba(255,255,255,.1);padding:2px 8px;border-radius:5px;font-size:12px;">⋮</span> góc trên phải</div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(91,156,246,.12);border:1px solid rgba(91,156,246,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#5b9cf6;flex-shrink:0;">2</div>
+          <div style="font-size:13px;color:#c8d4e8;line-height:1.5;">Chọn <span style="color:#e8edf5;font-weight:600;">"Thêm vào màn hình chính"</span></div>
+        </div>
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div style="width:32px;height:32px;background:rgba(74,222,128,.1);border:1px solid rgba(74,222,128,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">✓</div>
+          <div style="font-size:13px;color:#4ade80;line-height:1.5;">Nhấn <span style="color:#4ade80;font-weight:600;">Thêm</span> xác nhận!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Native install button (Chrome PWA prompt) -->
+    <button id="install-native-btn" onclick="triggerInstall()" style="display:none;width:100%;background:linear-gradient(135deg,#5b9cf6,#3b82f6);color:#fff;border:none;border-radius:12px;padding:15px;font-size:15px;font-weight:600;cursor:pointer;font-family:'Space Grotesk',sans-serif;margin-bottom:10px;">⬇️ Cài ngay</button>
+    <button onclick="closeModal()" style="width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);color:#a0aec0;border-radius:12px;padding:14px;font-size:14px;font-weight:500;cursor:pointer;font-family:'Space Grotesk',sans-serif;">Đóng</button>
+  </div>
+</div>
+
+<!-- Floating Install Button -->
+<button onclick="showInstallModal()" id="install-fab" style="display:none;position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 80px);right:18px;z-index:500;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#5b9cf6,#2563eb);border:none;cursor:pointer;box-shadow:0 4px 20px rgba(91,156,246,.5);align-items:center;justify-content:center;font-size:22px;transition:transform .15s,opacity .3s;flex-direction:column;gap:2px;">📲</button>
+
+<script>
+(function(){
+  // 1. Inject manifest blob
+  try {
+    const raw = document.getElementById('pwa-manifest-data').textContent;
+    const blob = new Blob([raw], {type:'application/json'});
+    document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
+  } catch(e) {}
+
+  // 2. Service Worker
+  if ('serviceWorker' in navigator) {
+    const sw = `const C='vs3';self.addEventListener('install',e=>{self.skipWaiting();});self.addEventListener('activate',e=>{self.clients.claim();});self.addEventListener('fetch',e=>{if(e.request.url.includes('anthropic')||e.request.url.includes('goog')){e.respondWith(fetch(e.request).catch(()=>new Response('')));return;}e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));});`;
+    navigator.serviceWorker.register(URL.createObjectURL(new Blob([sw],{type:'application/javascript'}))).catch(()=>{});
+  }
+
+  // 3. Detect browser type
+  const ua = navigator.userAgent;
+  window._btype = ua.includes('SamsungBrowser') ? 'samsung' : ua.includes('Chrome') ? 'chrome' : 'chrome';
+
+  // 4. Native install prompt
+  let deferred = null;
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); deferred = e;
+    document.getElementById('install-native-btn').style.display = 'block';
+  });
+  window.addEventListener('appinstalled', () => {
+    document.getElementById('install-fab').style.display = 'none';
+  });
+
+  window.triggerInstall = async () => {
+    if (!deferred) return;
+    deferred.prompt();
+    await deferred.userChoice;
+    deferred = null;
+    closeModal();
+  };
+
+  window.showInstallModal = () => {
+    // Don't show in standalone mode
+    if (window.matchMedia('(display-mode: standalone)').matches) return;
+    const m = document.getElementById('install-modal');
+    m.style.display = 'flex';
+    document.getElementById('guide-samsung').style.display = window._btype === 'samsung' ? 'block' : 'none';
+    document.getElementById('guide-chrome').style.display  = window._btype === 'chrome'  ? 'block' : 'none';
+    if (!deferred) document.getElementById('install-native-btn').style.display = 'none';
+  };
+
+  window.closeModal = () => {
+    document.getElementById('install-modal').style.display = 'none';
+  };
+
+  document.getElementById('install-modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('install-modal')) closeModal();
+  });
+
+  // 5. Show FAB after 1.5s if not standalone
+  setTimeout(() => {
+    if (!window.matchMedia('(display-mode: standalone)').matches) {
+      const fab = document.getElementById('install-fab');
+      fab.style.display = 'flex';
+      fab.style.opacity = '0';
+      setTimeout(() => { fab.style.opacity = '1'; }, 50);
+    }
+  }, 1500);
+})();
+</script>
+</body>
+</html>
